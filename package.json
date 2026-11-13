@@ -1,0 +1,7 @@
+{
+  "name": "xica-marketing-site",
+  "private": true,
+  "description": "Site institucional trilíngue da XICA MARKETING (estático, sem dependências).",
+  "scripts": { "build": "node build.js" },
+  "engines": { "node": ">=18" }
+}
