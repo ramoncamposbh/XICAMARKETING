@@ -15,7 +15,8 @@
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Criado sob demanda: o SDK lança erro se a chave não existir.
+let resend;
 
 const list = (v) =>
   (v || '')
@@ -40,8 +41,17 @@ const escapeHtml = (s) =>
 
 async function handle(request) {
   if (request.method !== 'POST') {
-    return new Response('ok', { status: 200 });
+    const missing = ['RESEND_API_KEY', 'RESEND_WEBHOOK_SECRET', 'FORWARD_TO', 'FORWARD_ADDRESSES'].filter(
+      (k) => !process.env[k],
+    );
+    return Response.json({ ok: missing.length === 0, missing });
   }
+
+  if (!process.env.RESEND_API_KEY || !process.env.RESEND_WEBHOOK_SECRET) {
+    console.error('RESEND_API_KEY ou RESEND_WEBHOOK_SECRET não configurados');
+    return new Response('Not configured', { status: 500 });
+  }
+  resend ||= new Resend(process.env.RESEND_API_KEY);
 
   const payload = await request.text();
   const id = request.headers.get('svix-id');
