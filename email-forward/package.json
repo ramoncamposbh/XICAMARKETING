@@ -1,0 +1,10 @@
+{
+  "name": "xica-email-forward",
+  "private": true,
+  "description": "Encaminha para o Gmail os e-mails recebidos pelo Resend em comercial@xicamarketing.com.br.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "resend": "6.39.0"
+  }
+}
